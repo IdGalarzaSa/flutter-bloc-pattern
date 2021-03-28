@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:form_validation_bloc_pattern/src/models/product_model.dart';
 
 class ProductPage extends StatefulWidget {
   static final routeName = "ProductPage";
@@ -9,6 +10,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  ProductModel product = new ProductModel();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,16 +31,18 @@ class _ProductPageState extends State<ProductPage> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _nameTextFormField(),
-            Divider(),
-            _priceTextFormField(),
-            Divider(),
-            _switchTile(),
-            Divider(),
-            _saveButton(context),
-          ],
+        child: Form(
+          child: Column(
+            children: [
+              _nameTextFormField(),
+              Divider(),
+              _priceTextFormField(),
+              Divider(),
+              _switchTile(),
+              Divider(),
+              _saveButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -45,12 +50,14 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _nameTextFormField() {
     return TextFormField(
+      initialValue: product.titulo,
       decoration: InputDecoration(labelText: "Nombre"),
     );
   }
 
   Widget _priceTextFormField() {
     return TextFormField(
+      initialValue: product.valor.toString(),
       decoration: InputDecoration(labelText: "Precio"),
     );
   }
@@ -62,8 +69,11 @@ class _ProductPageState extends State<ProductPage> {
         style: TextStyle(color: ThemeData.dark().accentColor),
       ),
       activeColor: ThemeData.dark().accentColor,
-      value: false,
-      onChanged: (newValue) {},
+      value: product.disponible,
+      onChanged: (newValue) {
+        product.disponible = newValue;
+        setState(() {});
+      },
     );
   }
 
