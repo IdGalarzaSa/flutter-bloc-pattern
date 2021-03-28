@@ -69,21 +69,21 @@ class _HomePageState extends State<HomePage> {
       background: Container(
         color: Colors.red,
         child: Center(
-            child: Text(
-          "Deleting...",
-          style: TextStyle(fontSize: 25),
-        )),
+          child: Text("Deleting..."),
+        ),
       ),
-      onDismissed: (dirrection) {
-        setState(() {
-          _myCurrentProductList.remove(currentProduct);
-        });
+      onDismissed: (direction) {
+        _myCurrentProductList.remove(currentProduct);
         widget.productProvider.deleteProduct(currentProduct);
       },
       child: ListTile(
         title: Text(currentProduct.titulo),
-        trailing: Text(currentProduct.valor.toString()),
         subtitle: Text(currentProduct.id),
+        trailing: Text(currentProduct.valor.toString()),
+        onTap: () {
+          Navigator.pushNamed(context, ProductPage.routeName,
+              arguments: currentProduct);
+        },
       ),
     );
   }

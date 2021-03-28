@@ -38,14 +38,21 @@ class ProductProvider {
     return productList;
   }
 
-  void deleteProduct(ProductModel product) async {
+  Future<void> deleteProduct(ProductModel product) async {
     final url = Uri.parse('$_baseUrl/products/${product.id}.json');
-    final resp = await http.delete(url);
+    await http.delete(url);
+  }
+
+  Future<bool> editProduct(ProductModel product) async {
+    final url = Uri.parse('$_baseUrl/products/${product.id}.json');
+    final resp = await http.put(url, body: productoModelToJson(product));
 
     if (resp.statusCode == 200 || resp.statusCode == 201) {
       print(resp.body);
+      return true;
     } else {
       print(resp.body);
+      return false;
     }
   }
 }

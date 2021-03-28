@@ -12,13 +12,19 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  ProductModel product = new ProductModel();
-  ProductProvider productProvider = new ProductProvider();
+  ProductModel _product = new ProductModel();
+  ProductProvider _productProvider = new ProductProvider();
+
   final formKey = GlobalKey<FormState>();
   bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
+    ProductModel _previousProduct = ModalRoute.of(context).settings.arguments;
+    if (_previousProduct != null) {
+      _product = _previousProduct;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Product"),
@@ -56,7 +62,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _nameTextFormField() {
     return TextFormField(
-      initialValue: product.titulo,
+      initialValue: _product.titulo,
       decoration: InputDecoration(labelText: "Nombre"),
       validator: (currentName) {
         return currentName != null && currentName.length > 3
@@ -64,20 +70,20 @@ class _ProductPageState extends State<ProductPage> {
             : "El nombre del producto no es valido";
       },
       onSaved: (newProductName) {
-        product.titulo = newProductName;
+        _product.titulo = newProductName;
       },
     );
   }
 
   Widget _priceTextFormField() {
     return TextFormField(
-      initialValue: product.valor.toString(),
+      initialValue: _product.valor.toString(),
       decoration: InputDecoration(labelText: "Precio"),
       validator: (currentPrice) {
         return isNumeric(currentPrice) ? null : "No es un número valido";
       },
       onSaved: (newProductPrice) {
-        product.valor = double.parse(newProductPrice);
+        _product.valor = double.parse(newProductPrice);
       },
     );
   }
@@ -89,9 +95,9 @@ class _ProductPageState extends State<ProductPage> {
         style: TextStyle(color: ThemeData.dark().accentColor),
       ),
       activeColor: ThemeData.dark().accentColor,
-      value: product.disponible,
+      value: _product.disponible,
       onChanged: (newValue) {
-        product.disponible = newValue;
+        _product.disponible = newValue;
         setState(() {});
       },
     );
@@ -117,9 +123,23 @@ class _ProductPageState extends State<ProductPage> {
       isSaving = true;
       setState(() {});
       formKey.currentState.save();
-      await productProvider.createProduct(product);
+
+      if (_product.id == null) {
+        await _productProvider.createProduct(_product);
+        showSnackBar('Producto creado');
+      } else {
+        await _productProvider.editProduct(_product);
+        showSnackBar('Producto editado');
+      }
       Navigator.pop(context);
     }
-    // Navigator.pop(context);
+  }
+
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 }
