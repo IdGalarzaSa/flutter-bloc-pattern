@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:form_validation_bloc_pattern/src/bloc/provider.dart';
 import 'package:form_validation_bloc_pattern/src/pages/home_page.dart';
 import 'package:form_validation_bloc_pattern/src/pages/login_page.dart';
+import 'package:form_validation_bloc_pattern/src/pages/product_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,12 +13,13 @@ class MyApp extends StatelessWidget {
     return ProviderBloc(
       child: MaterialApp(
         title: 'Material App',
-        initialRoute: LoginPage.routeName,
+        initialRoute: HomePage.routeName,
         routes: {
           LoginPage.routeName: (BuildContext context) => LoginPage(),
           HomePage.routeName: (BuildContext context) => HomePage(),
+          ProductPage.routeName: (BuildContext context) => ProductPage(),
         },
-        theme: ThemeData(primaryColor: Colors.deepPurple),
+        theme: ThemeData.dark(),
       ),
     );
   }
