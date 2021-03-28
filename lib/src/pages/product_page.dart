@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validation_bloc_pattern/src/models/product_model.dart';
 import 'package:form_validation_bloc_pattern/src/providers/product_provider.dart';
+import 'package:form_validation_bloc_pattern/src/utils/validations.dart';
 
 class ProductPage extends StatefulWidget {
   static final routeName = "ProductPage";
@@ -13,6 +14,8 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   ProductModel product = new ProductModel();
   ProductProvider productProvider = new ProductProvider();
+  final formKey = GlobalKey<FormState>();
+  bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class _ProductPageState extends State<ProductPage> {
       child: Container(
         padding: EdgeInsets.all(16),
         child: Form(
+          key: formKey,
           child: Column(
             children: [
               _nameTextFormField(),
@@ -54,6 +58,14 @@ class _ProductPageState extends State<ProductPage> {
     return TextFormField(
       initialValue: product.titulo,
       decoration: InputDecoration(labelText: "Nombre"),
+      validator: (currentName) {
+        return currentName != null && currentName.length > 3
+            ? null
+            : "El nombre del producto no es valido";
+      },
+      onSaved: (newProductName) {
+        product.titulo = newProductName;
+      },
     );
   }
 
@@ -61,6 +73,12 @@ class _ProductPageState extends State<ProductPage> {
     return TextFormField(
       initialValue: product.valor.toString(),
       decoration: InputDecoration(labelText: "Precio"),
+      validator: (currentPrice) {
+        return isNumeric(currentPrice) ? null : "No es un número valido";
+      },
+      onSaved: (newProductPrice) {
+        product.valor = double.parse(newProductPrice);
+      },
     );
   }
 
@@ -89,13 +107,19 @@ class _ProductPageState extends State<ProductPage> {
         ),
         icon: Icon(Icons.save),
         label: Text("Guardar"),
-        onPressed: saveButton,
+        onPressed: isSaving ? null : saveButton,
       ),
     );
   }
 
-  void saveButton() {
-    productProvider.createProduct(product);
-    Navigator.pop(context);
+  Future<void> saveButton() async {
+    if (formKey.currentState.validate()) {
+      isSaving = true;
+      setState(() {});
+      formKey.currentState.save();
+      await productProvider.createProduct(product);
+      Navigator.pop(context);
+    }
+    // Navigator.pop(context);
   }
 }

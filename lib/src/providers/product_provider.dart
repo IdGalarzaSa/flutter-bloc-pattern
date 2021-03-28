@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:form_validation_bloc_pattern/src/models/product_model.dart';
 
@@ -15,6 +17,35 @@ class ProductProvider {
     } else {
       print(resp.body);
       return false;
+    }
+  }
+
+  Future<List<ProductModel>> getProducts() async {
+    final url = Uri.parse('$_baseUrl/products.json');
+    final resp = await http.get(url);
+    final List<ProductModel> productList = [];
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      final Map<String, dynamic> decodedData = json.decode(resp.body);
+      if (decodedData != null) {
+        decodedData.forEach((id, prod) {
+          final tempProduct = new ProductModel.fromJson(prod);
+          tempProduct.id = id;
+          productList.add(tempProduct);
+        });
+      }
+    }
+    return productList;
+  }
+
+  void deleteProduct(ProductModel product) async {
+    final url = Uri.parse('$_baseUrl/products/${product.id}.json');
+    final resp = await http.delete(url);
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      print(resp.body);
+    } else {
+      print(resp.body);
     }
   }
 }
