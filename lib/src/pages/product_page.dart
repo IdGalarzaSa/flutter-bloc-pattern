@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validation_bloc_pattern/src/models/product_model.dart';
+import 'package:form_validation_bloc_pattern/src/providers/product_provider.dart';
 
 class ProductPage extends StatefulWidget {
   static final routeName = "ProductPage";
@@ -11,6 +12,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   ProductModel product = new ProductModel();
+  ProductProvider productProvider = new ProductProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class _ProductPageState extends State<ProductPage> {
               Divider(),
               _switchTile(),
               Divider(),
-              _saveButton(context),
+              _saveButton(),
             ],
           ),
         ),
@@ -77,7 +79,7 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  Widget _saveButton(BuildContext context) {
+  Widget _saveButton() {
     return Container(
       width: double.infinity,
       child: ElevatedButton.icon(
@@ -87,8 +89,13 @@ class _ProductPageState extends State<ProductPage> {
         ),
         icon: Icon(Icons.save),
         label: Text("Guardar"),
-        onPressed: () {},
+        onPressed: saveButton,
       ),
     );
+  }
+
+  void saveButton() {
+    productProvider.createProduct(product);
+    Navigator.pop(context);
   }
 }
