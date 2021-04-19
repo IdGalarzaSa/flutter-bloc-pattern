@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
         trailing: Text(currentProduct.valor.toString()),
         onTap: () {
           Navigator.pushNamed(context, ProductPage.routeName,
-              arguments: currentProduct);
+                  arguments: currentProduct)
+              .then((value) => setState(() {}));
         },
       ),
     );

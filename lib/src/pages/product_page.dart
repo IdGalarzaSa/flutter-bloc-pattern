@@ -128,8 +128,9 @@ class _ProductPageState extends State<ProductPage> {
         await _productProvider.createProduct(_product);
         showSnackBar('Producto creado');
       } else {
-        await _productProvider.editProduct(_product);
-        showSnackBar('Producto editado');
+        await _productProvider.editProduct(_product)
+            ? showSnackBar('Producto editado')
+            : showSnackBar('Error al editar');
       }
       Navigator.pop(context);
     }
