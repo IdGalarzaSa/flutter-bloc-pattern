@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validation_bloc_pattern/src/models/product_model.dart';
 import 'package:form_validation_bloc_pattern/src/providers/product_provider.dart';
 import 'package:form_validation_bloc_pattern/src/utils/validations.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductPage extends StatefulWidget {
   static final routeName = "ProductPage";
@@ -18,6 +21,8 @@ class _ProductPageState extends State<ProductPage> {
   final formKey = GlobalKey<FormState>();
   bool isSaving = false;
 
+  File selectedPicture;
+
   @override
   Widget build(BuildContext context) {
     ProductModel _previousProduct = ModalRoute.of(context).settings.arguments;
@@ -30,8 +35,8 @@ class _ProductPageState extends State<ProductPage> {
         title: Text("Product"),
         centerTitle: true,
         actions: [
-          IconButton(icon: Icon(Icons.image), onPressed: () {}),
-          IconButton(icon: Icon(Icons.camera_alt), onPressed: () {}),
+          IconButton(icon: Icon(Icons.image), onPressed: _selectPhoto),
+          IconButton(icon: Icon(Icons.camera_alt), onPressed: _selectCamera),
         ],
       ),
       body: _body(),
@@ -46,6 +51,8 @@ class _ProductPageState extends State<ProductPage> {
           key: formKey,
           child: Column(
             children: [
+              _selectedPicture(),
+              Divider(),
               _nameTextFormField(),
               Divider(),
               _priceTextFormField(),
@@ -142,5 +149,36 @@ class _ProductPageState extends State<ProductPage> {
         content: Text(message),
       ),
     );
+  }
+
+  void _selectPhoto() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    selectedPicture = File(pickedFile.path);
+
+    if (selectedPicture != null) {
+      _product.fotoUrl = null;
+    }
+
+    setState(() {});
+  }
+
+  void _selectCamera() {}
+
+  Widget _selectedPicture() {
+    if (_product.fotoUrl != null) {
+      return Container();
+    } else {
+      if (selectedPicture != null) {
+        return Image.file(
+          selectedPicture,
+          fit: BoxFit.cover,
+          height: 200.0,
+          width: 200,
+        );
+      }
+      return Image.asset('lib/assets/no-image.png');
+    }
   }
 }
