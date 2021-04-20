@@ -164,7 +164,17 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {});
   }
 
-  void _selectCamera() {}
+  void _selectCamera() async {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+
+    selectedPicture = File(pickedFile.path);
+
+    if (selectedPicture != null) {
+      _product.fotoUrl = null;
+    }
+
+    setState(() {});
+  }
 
   Widget _selectedPicture() {
     if (_product.fotoUrl != null) {
