@@ -59,7 +59,7 @@ class ProductProvider {
     }
   }
 
-  Future<String> _uploadImage(File image) async {
+  Future<String> uploadImage(File image) async {
     final url = Uri.parse(
         "https://api.cloudinary.com/v1_1/ivangala/image/upload?upload_preset=r0ibrfku");
     final mimeType = mime(image.path).split('/'); //image/jpg

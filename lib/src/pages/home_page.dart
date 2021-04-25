@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (BuildContext context, int index) {
         final currentProduct = _myCurrentProductList[index];
         return itemList(currentProduct);
+        // return itemList(currentProduct);
       },
     );
   }
@@ -76,15 +77,30 @@ class _HomePageState extends State<HomePage> {
         _myCurrentProductList.remove(currentProduct);
         widget.productProvider.deleteProduct(currentProduct);
       },
-      child: ListTile(
-        title: Text(currentProduct.titulo),
-        subtitle: Text(currentProduct.id),
-        trailing: Text(currentProduct.valor.toString()),
-        onTap: () {
-          Navigator.pushNamed(context, ProductPage.routeName,
-                  arguments: currentProduct)
-              .then((value) => setState(() {}));
-        },
+      child: Card(
+        child: Column(
+          children: [
+            currentProduct.fotoUrl == null
+                ? Image.asset('lib/assets/no-image.png')
+                : FadeInImage(
+                    placeholder: AssetImage('lib/assets/jar-loading.gif'),
+                    image: NetworkImage(currentProduct.fotoUrl),
+                    height: 250,
+                    width: 250,
+                    fit: BoxFit.cover,
+                  ),
+            ListTile(
+              title: Text(currentProduct.titulo),
+              subtitle: Text(currentProduct.id),
+              trailing: Text(currentProduct.valor.toString()),
+              onTap: () {
+                Navigator.pushNamed(context, ProductPage.routeName,
+                        arguments: currentProduct)
+                    .then((value) => setState(() {}));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

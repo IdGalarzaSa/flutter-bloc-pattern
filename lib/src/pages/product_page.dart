@@ -131,6 +131,10 @@ class _ProductPageState extends State<ProductPage> {
       setState(() {});
       formKey.currentState.save();
 
+      if (selectedPicture != null) {
+        _product.fotoUrl = await _productProvider.uploadImage(selectedPicture);
+      }
+
       if (_product.id == null) {
         await _productProvider.createProduct(_product);
         showSnackBar('Producto creado');
