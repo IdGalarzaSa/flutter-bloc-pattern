@@ -182,7 +182,10 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _selectedPicture() {
     if (_product.fotoUrl != null) {
-      return Container();
+      return FadeInImage(
+        placeholder: AssetImage("lib/assets/jar-loading.gif"),
+        image: NetworkImage(_product.fotoUrl),
+      );
     } else {
       if (selectedPicture != null) {
         return Image.file(
