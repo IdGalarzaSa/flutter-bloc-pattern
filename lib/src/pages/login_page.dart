@@ -132,12 +132,20 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
+            style: TextStyle(color: Colors.blueGrey),
             decoration: InputDecoration(
               icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
               hintText: 'ejemplo@gmail.com',
               labelText: 'Correo electrónico',
               errorMaxLines: 3,
               errorText: snapshot.error,
+              labelStyle: TextStyle(color: Colors.deepPurple),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurple),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurple),
+              ),
             ),
             onChanged: loginBloc.changeEmail,
           ),
@@ -156,11 +164,19 @@ class LoginPage extends StatelessWidget {
             obscureText: true,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
+            style: TextStyle(color: Colors.blueGrey),
             decoration: InputDecoration(
               icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
               labelText: 'Contraseña',
               errorText: snapshot.error,
               errorMaxLines: 3,
+              labelStyle: TextStyle(color: Colors.deepPurple),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurple),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurple),
+              ),
             ),
             onChanged: loginBloc.changePassword,
           ),

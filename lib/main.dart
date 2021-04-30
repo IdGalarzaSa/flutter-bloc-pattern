@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return ProviderBloc(
       child: MaterialApp(
         title: 'Material App',
-        initialRoute: HomePage.routeName,
+        initialRoute: LoginPage.routeName,
         routes: {
           LoginPage.routeName: (BuildContext context) => LoginPage(),
           HomePage.routeName: (BuildContext context) => HomePage(),
